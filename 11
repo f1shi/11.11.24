@@ -1,0 +1,35 @@
+def f(x, y, m):
+  if x >= 40 or y >= 40: return m % 2 == 0
+  if m == 0: return 0
+
+  if x != y:
+    steps = [f(min(x , y), max(x, y) + 1, m - 1), f(min(x , y), max(x, y) + 2, m - 1), f(min(x , y), max(x, y) + 3, m - 1), f(min(x , y) * 2, max(x, y) + 1, m - 1)]
+  else:
+    steps = [f(x + 1, y, m - 1), f(x + 2, y, m - 1), f(x + 3, y, m - 1), f(x, y + 1, m - 1), f(x, y + 2, m - 1), f(x, y + 3, m - 1),]
+
+  if m % 2 != 0:
+    return any(steps)
+  else:
+    return all(steps)
+
+# Начальное состояние куч
+x = 11
+y = 5
+
+# Ищем минимальное и максимальное значение S
+min_s = 1
+max_s = 39
+
+for s in range(min_s, max_s + 1):
+  # Проверяем, может ли Петя выиграть первым ходом
+  if f(x, y, 1):
+    continue
+  # Проверяем, есть ли у Пети выигрышная стратегия вторым ходом
+  if not any([f(x + 1, y, 0), f(x + 2, y, 0), f(x + 3, y, 0), f(x, y + 1, 0), f(x, y + 2, 0), f(x, y + 3, 0)]):
+    continue
+  # Если условия выполняются, обновляем границы
+  min_s = s
+  max_s = s
+
+# Вывод результата
+print(min_s, max_s)
